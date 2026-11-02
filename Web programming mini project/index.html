@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinFlow - Personal Finance Dashboard | MCA Mini Project</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome 6 Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="brand-logo">
+          <div class="brand-icon">
+            <i class="fa-solid fa-chart-pie"></i>
+          </div>
+          <div class="brand-text">
+            <h2>FinFlow</h2>
+            <span class="brand-badge">MCA 1st Sem</span>
+          </div>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <span class="nav-section-title">Main Menu</span>
+        <button class="nav-link active" data-tab="dashboard">
+          <i class="fa-solid fa-house"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-link" data-tab="transactions">
+          <i class="fa-solid fa-receipt"></i>
+          <span>Transactions</span>
+        </button>
+        <button class="nav-link" data-tab="budgets">
+          <i class="fa-solid fa-bullseye"></i>
+          <span>Budgets & Goals</span>
+        </button>
+        <button class="nav-link" data-tab="analytics">
+          <i class="fa-solid fa-chart-column"></i>
+          <span>Analytics & Reports</span>
+        </button>
+
+        <span class="nav-section-title">Financial Tools</span>
+        <button class="nav-link" data-tab="calculators">
+          <i class="fa-solid fa-calculator"></i>
+          <span>Calculators (EMI/SIP)</span>
+        </button>
+        <button class="nav-link" data-tab="settings">
+          <i class="fa-solid fa-sliders"></i>
+          <span>Settings & Backup</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="project-credit-box">
+          <div class="title"><i class="fa-solid fa-graduation-cap"></i> MCA Mini Project</div>
+          <div class="sub">Web Programming (HTML, CSS, JS)</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="header-title-block">
+            <h1 id="pageTitle">Financial Overview</h1>
+            <p id="pageGreeting">Welcome, MCA Scholar! Here is your current financial pulse.</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- Currency Picker -->
+          <div class="header-pill">
+            <i class="fa-solid fa-coins"></i>
+            <select class="currency-select" id="currencySelector" aria-label="Select Currency">
+              <option value="INR">₹ INR</option>
+              <option value="USD">$ USD</option>
+              <option value="EUR">€ EUR</option>
+            </select>
+          </div>
+
+          <!-- Light/Dark Theme Toggle -->
+          <button class="theme-toggle-btn" id="themeToggleBtn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+            <i class="fa-solid fa-moon" id="themeIcon"></i>
+          </button>
+
+          <!-- Quick Load Demo Data -->
+          <button class="btn btn-secondary btn-sm" id="btnQuickDemo" title="Load realistic sample data for MCA Viva/Evaluation">
+            <i class="fa-solid fa-arrows-rotate"></i>
+            <span>Reset Demo</span>
+          </button>
+
+          <!-- Add Transaction Modal Trigger -->
+          <button class="btn btn-primary" id="btnOpenAddModal">
+            <i class="fa-solid fa-plus"></i>
+            <span>Add Transaction</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dynamic Page Container -->
+      <main class="page-container">
+
+        <!-- ================= TAB 1: DASHBOARD ================= -->
+        <section class="tab-content active" id="tab-dashboard">
+          
+          <!-- Key Financial Metric Cards -->
+          <div class="metrics-grid">
+            <div class="metric-card balance">
+              <div class="metric-info">
+                <div class="metric-label">Net Balance</div>
+                <div class="metric-value" id="cardNetBalance">₹0</div>
+                <div class="metric-sub">
+                  <span class="metric-badge positive"><i class="fa-solid fa-arrow-trend-up"></i> Available</span>
+                  <span>All wallets</span>
+                </div>
+              </div>
+              <div class="metric-icon-box">
+                <i class="fa-solid fa-wallet"></i>
+              </div>
+            </div>
+
+            <div class="metric-card income">
+              <div class="metric-info">
+                <div class="metric-label">Total Inflow</div>
+                <div class="metric-value" id="cardTotalIncome">₹0</div>
+                <div class="metric-sub">
+                  <span class="metric-badge positive"><i class="fa-solid fa-arrow-down-long"></i> Income</span>
+                  <span>Scholarships & earnings</span>
+                </div>
+              </div>
+              <div class="metric-icon-box">
+                <i class="fa-solid fa-circle-down"></i>
+              </div>
+            </div>
+
+            <div class="metric-card expense">
+              <div class="metric-info">
+                <div class="metric-label">Total Outflow</div>
+                <div class="metric-value" id="cardTotalExpense">₹0</div>
+                <div class="metric-sub">
+                  <span class="metric-badge negative"><i class="fa-solid fa-arrow-up-long"></i> Expenses</span>
+                  <span>College, rent & living</span>
+                </div>
+              </div>
+              <div class="metric-icon-box">
+                <i class="fa-solid fa-circle-up"></i>
+              </div>
+            </div>
+
+            <div class="metric-card savings">
+              <div class="metric-info">
+                <div class="metric-label">Savings Ratio</div>
+                <div class="metric-value" id="cardSavingsRate">0%</div>
+                <div class="metric-sub">
+                  <span class="metric-badge positive" id="cardSavingsBadge">Target > 20%</span>
+                </div>
+              </div>
+              <div class="metric-icon-box">
+                <i class="fa-solid fa-piggy-bank"></i>
+              </div>
+            </div>
+
+            <div class="metric-card score">
+              <div class="metric-info">
+                <div class="metric-label">Health Score</div>
+                <div class="metric-value" id="cardHealthScore">85/100</div>
+                <div class="metric-sub">
+                  <span class="metric-badge neutral" id="cardHealthLabel">Healthy</span>
+                </div>
+              </div>
+              <div class="metric-icon-box">
+                <i class="fa-solid fa-heart-pulse"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Two Column Grid: Charts & Details -->
+          <div class="dashboard-grid">
+            
+            <!-- Left Column: Visual Analytics & Recent Transactions -->
+            <div class="grid-col-left">
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2 class="card-title"><i class="fa-solid fa-chart-simple"></i> Cash Inflow vs Outflow</h2>
+                    <p class="card-subtitle">Daily comparison of earnings vs spendings</p>
+                  </div>
+                </div>
+                <div class="chart-wrapper">
+                  <canvas id="cashFlowBarCanvas"></canvas>
+                </div>
+              </div>
+
+              <!-- Recent Transactions Table Card -->
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2 class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Transactions</h2>
+                    <p class="card-subtitle">Your latest logged entries</p>
+                  </div>
+                  <button class="btn btn-secondary btn-sm" id="btnViewAllTxns">View All</button>
+                </div>
+                <div class="table-container">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Wallet</th>
+                        <th style="text-align: right;">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody id="dashboardRecentTxnsBody">
+                      <!-- Rendered dynamically -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Category Distribution & Wallets -->
+            <div class="grid-col-right">
+              
+              <!-- Category Donut Card -->
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2 class="card-title"><i class="fa-solid fa-chart-pie"></i> Spending by Category</h2>
+                    <p class="card-subtitle">Where your money goes</p>
+                  </div>
+                </div>
+                <div class="chart-wrapper" style="min-height: 250px;">
+                  <canvas id="expensePieCanvas"></canvas>
+                </div>
+              </div>
+
+              <!-- Wallets Breakdown Card -->
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2 class="card-title"><i class="fa-solid fa-building-columns"></i> Wallets & Accounts</h2>
+                    <p class="card-subtitle">Balances across stored payment methods</p>
+                  </div>
+                </div>
+                <div class="wallets-container" id="walletsContainer">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+
+              <!-- Quick Savings Goals Highlight -->
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h2 class="card-title"><i class="fa-solid fa-bullseye"></i> Goal Highlight</h2>
+                    <p class="card-subtitle">Current active savings progress</p>
+                  </div>
+                  <button class="btn btn-secondary btn-sm" id="btnManageGoals">Manage</button>
+                </div>
+                <div id="dashboardGoalHighlight">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ================= TAB 2: TRANSACTIONS ================= -->
+        <section class="tab-content" id="tab-transactions">
+          
+          <!-- Filters & Action Bar -->
+          <div class="toolbar-bar">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="txnSearchInput" placeholder="Search by title or note...">
+            </div>
+
+            <div class="filter-group">
+              <select class="select-filter" id="txnFilterType" aria-label="Filter by type">
+                <option value="all">All Types</option>
+                <option value="income">Income Only</option>
+                <option value="expense">Expense Only</option>
+              </select>
+
+              <select class="select-filter" id="txnFilterCategory" aria-label="Filter by category">
+                <option value="all">All Categories</option>
+                <!-- Populated dynamically -->
+              </select>
+
+              <select class="select-filter" id="txnFilterAccount" aria-label="Filter by account">
+                <option value="all">All Accounts</option>
+                <!-- Populated dynamically -->
+              </select>
+
+              <select class="select-filter" id="txnSortBy" aria-label="Sort transactions">
+                <option value="date-desc">Date (Newest First)</option>
+                <option value="date-asc">Date (Oldest First)</option>
+                <option value="amount-desc">Amount (High to Low)</option>
+                <option value="amount-asc">Amount (Low to High)</option>
+              </select>
+
+              <button class="btn btn-secondary btn-sm" id="btnExportCSV" title="Export transactions table to CSV file">
+                <i class="fa-solid fa-file-csv"></i>
+                <span>Export CSV</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- All Transactions Table Card -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title"><i class="fa-solid fa-table-list"></i> Transaction Records</h2>
+                <p class="card-subtitle" id="txnResultsCount">Showing all logged transactions</p>
+              </div>
+              <button class="btn btn-primary btn-sm" id="btnNewTxnFromTable">
+                <i class="fa-solid fa-plus"></i> Add New
+              </button>
+            </div>
+
+            <div class="table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Title & Notes</th>
+                    <th>Account</th>
+                    <th>Type</th>
+                    <th style="text-align: right;">Amount</th>
+                    <th style="text-align: center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="fullTransactionsTableBody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Empty State Container -->
+            <div id="txnsEmptyState" class="empty-state" style="display: none;">
+              <i class="fa-solid fa-receipt"></i>
+              <p>No transactions match your search criteria.</p>
+              <button class="btn btn-secondary btn-sm" id="btnClearTxnFilters">Clear Filters</button>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ================= TAB 3: BUDGETS & GOALS ================= -->
+        <section class="tab-content" id="tab-budgets">
+          
+          <!-- Category Monthly Budgets Section -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title"><i class="fa-solid fa-wallet"></i> Monthly Category Budgets</h2>
+                <p class="card-subtitle">Set monthly spending limits per category to prevent overspending</p>
+              </div>
+              <button class="btn btn-primary btn-sm" id="btnOpenSetBudgetModal">
+                <i class="fa-solid fa-sliders"></i> Set Budget Limits
+              </button>
+            </div>
+
+            <div class="budget-grid" id="budgetCardsGrid">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Savings Goals Tracker Section -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title"><i class="fa-solid fa-bullseye"></i> Financial & Academic Savings Goals</h2>
+                <p class="card-subtitle">Track targets for laptops, courses, certifications, and emergencies</p>
+              </div>
+              <button class="btn btn-primary btn-sm" id="btnOpenAddGoalModal">
+                <i class="fa-solid fa-plus"></i> Create Goal
+              </button>
+            </div>
+
+            <div class="goals-grid" id="goalsCardsGrid">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ================= TAB 4: ANALYTICS & REPORTS ================= -->
+        <section class="tab-content" id="tab-analytics">
+          
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title"><i class="fa-solid fa-file-invoice-dollar"></i> Comprehensive Financial Health Report</h2>
+                <p class="card-subtitle">Executive summary suitable for documentation and viva presentation</p>
+              </div>
+              <button class="btn btn-secondary btn-sm" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> Print Report / Save PDF
+              </button>
+            </div>
+
+            <div id="analyticsReportContainer">
+              <!-- Generated dynamically with category spending percentages and smart insights -->
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ================= TAB 5: FINANCIAL CALCULATORS ================= -->
+        <section class="tab-content" id="tab-calculators">
+          
+          <div class="calculators-grid">
+            
+            <!-- Loan / EMI Calculator Card -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title"><i class="fa-solid fa-hand-holding-dollar"></i> Education & Personal Loan EMI Calculator</h2>
+                  <p class="card-subtitle">Calculate monthly installment, interest, and payment split</p>
+                </div>
+              </div>
+
+              <div class="calc-form-group">
+                <label for="emiPrincipal">Loan Amount (<span class="currency-label">₹</span>)</label>
+                <div class="calc-input-row">
+                  <input type="number" id="emiPrincipal" value="100000" min="1000" step="1000">
+                </div>
+              </div>
+
+              <div class="calc-form-group">
+                <label for="emiRate">Annual Interest Rate (%)</label>
+                <div class="calc-input-row">
+                  <input type="number" id="emiRate" value="8.5" min="0.1" max="50" step="0.1">
+                </div>
+              </div>
+
+              <div class="calc-form-group">
+                <label for="emiTenure">Tenure (Years)</label>
+                <div class="calc-input-row">
+                  <input type="number" id="emiTenure" value="3" min="1" max="30" step="1">
+                </div>
+              </div>
+
+              <div class="calc-result-box">
+                <div class="calc-result-item">
+                  <div class="label">Monthly EMI</div>
+                  <div class="val" id="emiResultMonthly">₹0</div>
+                </div>
+                <div class="calc-result-item">
+                  <div class="label">Total Interest</div>
+                  <div class="val" id="emiResultInterest">₹0</div>
+                </div>
+                <div class="calc-result-item">
+                  <div class="label">Total Payable</div>
+                  <div class="val" id="emiResultTotal">₹0</div>
+                </div>
+              </div>
+
+              <div class="chart-wrapper" style="min-height: 200px; margin-top: 16px;">
+                <canvas id="emiChartCanvas"></canvas>
+              </div>
+            </div>
+
+            <!-- SIP Wealth Accumulation Calculator -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h2 class="card-title"><i class="fa-solid fa-chart-line"></i> SIP / Mutual Fund Wealth Calculator</h2>
+                  <p class="card-subtitle">Project long-term compound growth for early savings</p>
+                </div>
+              </div>
+
+              <div class="calc-form-group">
+                <label for="sipMonthly">Monthly Investment (<span class="currency-label">₹</span>)</label>
+                <div class="calc-input-row">
+                  <input type="number" id="sipMonthly" value="2500" min="100" step="500">
+                </div>
+              </div>
+
+              <div class="calc-form-group">
+                <label for="sipReturn">Expected Annual Return Rate (%)</label>
+                <div class="calc-input-row">
+                  <input type="number" id="sipReturn" value="12" min="1" max="40" step="0.5">
+                </div>
+              </div>
+
+              <div class="calc-form-group">
+                <label for="sipTenure">Investment Period (Years)</label>
+                <div class="calc-input-row">
+                  <input type="number" id="sipTenure" value="5" min="1" max="40" step="1">
+                </div>
+              </div>
+
+              <div class="calc-result-box">
+                <div class="calc-result-item">
+                  <div class="label">Total Invested</div>
+                  <div class="val" id="sipResultInvested">₹0</div>
+                </div>
+                <div class="calc-result-item">
+                  <div class="label">Estimated Returns</div>
+                  <div class="val" id="sipResultReturns">₹0</div>
+                </div>
+                <div class="calc-result-item">
+                  <div class="label">Total Projected Value</div>
+                  <div class="val" id="sipResultTotal">₹0</div>
+                </div>
+              </div>
+
+              <div class="chart-wrapper" style="min-height: 200px; margin-top: 16px;">
+                <canvas id="sipChartCanvas"></canvas>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 50 / 30 / 20 Budget Rule Guide -->
+          <div class="card" style="margin-top: 24px;">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title"><i class="fa-solid fa-scale-balanced"></i> The 50 / 30 / 20 Student Budget Rule</h2>
+                <p class="card-subtitle">Recommended standard by financial advisors for sustainable budgeting</p>
+              </div>
+            </div>
+
+            <div class="calc-input-row" style="max-width: 400px; margin-bottom: 20px;">
+              <input type="number" id="ruleMonthlyIncome" placeholder="Enter your monthly inflow..." value="30000">
+              <button class="btn btn-primary btn-sm" id="btnCalculate503020">Calculate</button>
+            </div>
+
+            <div class="metrics-grid" id="ruleResultsGrid">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ================= TAB 6: SETTINGS & BACKUP ================= -->
+        <section class="tab-content" id="tab-settings">
+          
+          <div class="settings-section">
+            <h3><i class="fa-solid fa-user-gear"></i> User Preferences</h3>
+            <p>Customize your profile and display preferences</p>
+            
+            <div class="form-row" style="max-width: 600px;">
+              <div class="form-group">
+                <label for="settingUserName">Your Name / Student ID</label>
+                <input type="text" class="form-control" id="settingUserName" value="MCA Student">
+              </div>
+              <div class="form-group">
+                <label for="settingCurrency">Preferred Currency</label>
+                <select class="form-control" id="settingCurrency">
+                  <option value="INR">Indian Rupee (₹ INR)</option>
+                  <option value="USD">US Dollar ($ USD)</option>
+                  <option value="EUR">Euro (€ EUR)</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="btn btn-primary btn-sm" id="btnSavePreferences">
+              <i class="fa-solid fa-check"></i> Save Preferences
+            </button>
+          </div>
+
+          <div class="settings-section">
+            <h3><i class="fa-solid fa-database"></i> Data Backup & Restore</h3>
+            <p>Export your dashboard state to a JSON file or restore from a backup</p>
+            
+            <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;">
+              <button class="btn btn-secondary btn-sm" id="btnDownloadJSON">
+                <i class="fa-solid fa-download"></i> Export Backup (JSON)
+              </button>
+
+              <label class="btn btn-secondary btn-sm" style="margin-bottom: 0; cursor: pointer;">
+                <i class="fa-solid fa-upload"></i> Restore from JSON
+                <input type="file" id="importJSONFile" accept=".json" style="display: none;">
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-section" style="border-color: rgba(238, 93, 80, 0.4);">
+            <h3 style="color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</h3>
+            <p>Reset or delete data. Useful for testing and starting a fresh evaluation.</p>
+            
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+              <button class="btn btn-secondary btn-sm" id="btnResetToDefaults">
+                <i class="fa-solid fa-arrow-rotate-left"></i> Reload Sample MCA Data
+              </button>
+              <button class="btn btn-outline-danger btn-sm" id="btnClearAllData">
+                <i class="fa-solid fa-trash-can"></i> Clear All Data
+              </button>
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Modal 1: Add / Edit Transaction -->
+  <div class="modal-overlay" id="transactionModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 id="txnModalTitle"><i class="fa-solid fa-circle-plus"></i> Add Transaction</h3>
+        <button class="modal-close-btn" data-close-modal="transactionModal">&times;</button>
+      </div>
+
+      <form id="txnForm">
+        <input type="hidden" id="txnEditId" value="">
+        
+        <div class="modal-body">
+          <!-- Type Switch -->
+          <div class="type-radio-group">
+            <label class="type-radio-btn">
+              <input type="radio" name="txnType" value="expense" checked>
+              <i class="fa-solid fa-arrow-up-long"></i> Expense
+            </label>
+            <label class="type-radio-btn">
+              <input type="radio" name="txnType" value="income">
+              <i class="fa-solid fa-arrow-down-long"></i> Income
+            </label>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="txnAmount">Amount *</label>
+              <input type="number" class="form-control" id="txnAmount" placeholder="e.g. 500" required min="1" step="any">
+            </div>
+
+            <div class="form-group">
+              <label for="txnDate">Date *</label>
+              <input type="date" class="form-control" id="txnDate" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="txnTitle">Title / Description *</label>
+            <input type="text" class="form-control" id="txnTitle" placeholder="e.g. Semester Reference Books" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="txnCategory">Category *</label>
+              <select class="form-control" id="txnCategory" required>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="txnAccount">Account / Wallet *</label>
+              <select class="form-control" id="txnAccount" required>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="txnNotes">Notes / Tags (Optional)</label>
+            <input type="text" class="form-control" id="txnNotes" placeholder="e.g. Paid via GooglePay, receipt attached">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="transactionModal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSaveTxn">Save Transaction</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Set Budget Limit -->
+  <div class="modal-overlay" id="budgetModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-sliders"></i> Set Monthly Category Budget</h3>
+        <button class="modal-close-btn" data-close-modal="budgetModal">&times;</button>
+      </div>
+
+      <form id="budgetForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="budgetCategorySelect">Expense Category</label>
+            <select class="form-control" id="budgetCategorySelect" required>
+              <!-- Populated dynamically -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="budgetLimitInput">Monthly Limit (<span class="currency-label">₹</span>)</label>
+            <input type="number" class="form-control" id="budgetLimitInput" placeholder="e.g. 5000" min="100" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="budgetModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Limit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 3: Add / Edit Savings Goal -->
+  <div class="modal-overlay" id="goalModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 id="goalModalTitle"><i class="fa-solid fa-bullseye"></i> Create Savings Goal</h3>
+        <button class="modal-close-btn" data-close-modal="goalModal">&times;</button>
+      </div>
+
+      <form id="goalForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="goalTitle">Goal Name *</label>
+            <input type="text" class="form-control" id="goalTitle" placeholder="e.g. Laptop Upgrade / AWS Cert" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="goalTarget">Target Amount (<span class="currency-label">₹</span>) *</label>
+              <input type="number" class="form-control" id="goalTarget" placeholder="e.g. 25000" min="500" required>
+            </div>
+
+            <div class="form-group">
+              <label for="goalCurrent">Initial Saved (<span class="currency-label">₹</span>)</label>
+              <input type="number" class="form-control" id="goalCurrent" placeholder="0" min="0" value="0">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="goalDate">Target Deadline</label>
+            <input type="date" class="form-control" id="goalDate" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="goalModal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Goal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 4: Deposit to Goal -->
+  <div class="modal-overlay" id="goalDepositModal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-piggy-bank"></i> Add Funds to Goal</h3>
+        <button class="modal-close-btn" data-close-modal="goalDepositModal">&times;</button>
+      </div>
+
+      <form id="goalDepositForm">
+        <input type="hidden" id="depositGoalId">
+        <div class="modal-body">
+          <p id="depositGoalPrompt" style="margin-bottom: 14px; font-weight: 500;"></p>
+          <div class="form-group">
+            <label for="depositAmount">Amount to Deposit (<span class="currency-label">₹</span>)</label>
+            <input type="number" class="form-control" id="depositAmount" placeholder="e.g. 2000" min="1" required>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal="goalDepositModal">Cancel</button>
+          <button type="submit" class="btn btn-success">Confirm Deposit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Project Application Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/calculators.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
